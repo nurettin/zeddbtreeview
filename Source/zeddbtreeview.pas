@@ -152,9 +152,8 @@ begin
         FTextDataLink.DataSet.Open;
         FTextDataLink.DataSet.First;
         FNodes := TList.Create;
-        for i:= 1 to FTextDataLink.DataSet.RecordCount do
-         begin
-           if ( FTextDataLink.DataSet.FieldByName(FParentDataLink.FieldName).IsNull ) then
+        repeat
+          if ( FTextDataLink.DataSet.FieldByName(FParentDataLink.FieldName).IsNull ) then
              begin
                NewNode := Self.Items.AddNewChild(nil, FTextDataLink.Field.AsString);
                NewNode.ID := FTextDataLink.DataSet.FieldByName(FIDField).AsInteger;
@@ -179,7 +178,7 @@ begin
                 end;
             end;
           FTextDataLink.DataSet.Next;
-        end;
+        until (FTextDataLink.DataSet.Eof);
         RefreshNodes;
         FNodes.Free;
       finally
